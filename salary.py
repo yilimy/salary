@@ -148,6 +148,6 @@ if __name__ == '__main__':
         y = inputData - insu
         print "税前工资：%.2f, 税前扣除基数：3500" % y
         t = tax(y - 3500)
-        print "到手金额：%.2f" % (inputData - t)
+        print "到手金额：%.2f" % (y - t)
         print '\n'
         pass

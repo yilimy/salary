@@ -46,7 +46,7 @@ def genQuickDeduction():
                 ps = strs[1].strip().split('=')
                 preQuickValue = preTaxValue * (float(ps[1]) - preTaxLevel) * 0.01 + preQuickValue
                 # print ss[1] + "的速算扣除数为：%.2f" % preQuickValue
-                result += "s=%s, q=%.2f, p=%s\n" % (ss[1], preQuickValue, ps[1])
+                result += "s<=%s, q=%.2f, p=%s\n" % (ss[1], preQuickValue, ps[1])
                 preTaxValue = float(ss[1])
                 preTaxLevel = float(ps[1])
                 pass
@@ -81,7 +81,7 @@ def tax(taxValue):
                 continue
             strs = line.split(',')
             if len(strs) > 2:
-                ss = strs[0].strip().split('=')
+                ss = strs[0].strip().split('<=')
                 if taxValue > float(ss[1]):
                     continue
                 qs = strs[1].strip().split('=')
@@ -90,7 +90,7 @@ def tax(taxValue):
                 print "适用税率%s%%，应纳税额%.2f" % (ps[1], result)
                 break
             else:
-                qs = strs[0].strip().split('=')
+                qs = strs[0].strip().split('<=')
                 ps = strs[1].strip().split('=')
                 result = taxValue * float(ps[1]) * 0.01 - float(qs[1])
                 print "适用税率%s%%，应纳税额%.2f" % (ps[1], result)
@@ -127,24 +127,28 @@ def insurance(value):
         pass
     print "计费基数：%.2f" % value
     print "个人汇缴总额：%.2f" % result
+    print "----------------------------------------"
     return result
     
 if __name__ == '__main__':
     # readConsole()
     # readDataFile()
-    # genQuickDeduction()
+    genQuickDeduction()
     j = 0.0
     while True:
         j = input("请输入社保公积金计费基数：")
         break
-    insu = insurance(j)
-    print "\n"
-    
     while True:
         inputData = input("请输入工资:")
+        print "\n"
         if inputData < 0:
             print "输入负数，退出计算"
             break
+        insu = 0.0
+        if(j > 0):
+            insu = insurance(j)
+        else:
+            insu = insurance(inputData)
         y = inputData - insu
         print "税前工资：%.2f, 税前扣除基数：3500" % y
         t = tax(y - 3500)
